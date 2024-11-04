@@ -38,9 +38,13 @@ func test(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	mux := http.NewServeMux()
+
 	fmt.Println("Starting server on port 8080")
 
-	http.HandleFunc("/", serverStart)
-	http.HandleFunc("/message", test)
-	http.ListenAndServe(":8080", nil)
+	corsHandler := enableCORS(mux)
+
+	mux.HandleFunc("/", serverStart)
+	mux.HandleFunc("/message", test)
+	http.ListenAndServe(":8080", corsHandler)
 }
