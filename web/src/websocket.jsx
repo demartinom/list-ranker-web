@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 function WebSocketComponent() {
   const [socket, setSocket] = useState(null);
-  const [, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("test");
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function WebSocketComponent() {
       setInput("");
     }
   };
-
+  console.log(messages);
   return <button onClick={sendMessage}>Click</button>;
 }
 
