@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/demartinom/list-ranker-web/pkg/battle"
 	"github.com/gorilla/websocket"
 )
 
@@ -20,7 +21,9 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Connected Successfully")
 
+	battle.SendBattleOptions(ws)
 	for {
+
 		_, msg, err := ws.ReadMessage()
 		if err != nil {
 			log.Printf("Error reading message %v\n", err)
