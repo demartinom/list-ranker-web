@@ -1,5 +1,7 @@
+import WebSocketComponent from "./websocket";
+
 function App() {
-  return <></>;
+  return <WebSocketComponent />;
 }
 
 export default App;
