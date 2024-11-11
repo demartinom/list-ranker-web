@@ -21,8 +21,7 @@ func ConvertToSlice(listInput [][]string) []Item {
 
 func SendBattleOptions(conn *websocket.Conn) {
 	fileNames := GetFileNames()
-
-	jsonData, err := json.Marshal(fileNames)
+	jsonData, err := json.Marshal(ListChoices{"List Options", fileNames})
 	if err != nil {
 		log.Println("Error marshalling json:", err)
 		return
