@@ -41,7 +41,8 @@ func GetFileNames() []string {
 			return err
 		}
 		if !d.IsDir() {
-			files = append(files, d.Name())
+			fileName := d.Name()
+			files = append(files, fileName[:len(fileName)-4])
 		}
 		return nil
 	})
