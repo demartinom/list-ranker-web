@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -24,11 +26,19 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	battle.SendBattleOptions(ws)
 
 	for {
+		var message battle.ReceivedMessage
+
 		_, msg, err := ws.ReadMessage()
+		if err := json.Unmarshal(msg, &message); err != nil {
+			log.Println("Error unmarshalling:", err)
+		}
 		if err != nil {
 			log.Printf("Error reading message %v\n", err)
 		}
-		log.Printf("Received message : %s\n", msg)
+		switch message.MessageType {
+		case "Choice":
+			fmt.Printf("choice made %s\n", message.Data)
+		}
 
 		// if err = ws.WriteMessage(websocket.TextMessage, msg); err != nil {
 		// 	log.Printf("Error: %v\n", err)
