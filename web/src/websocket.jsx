@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 
 function WebSocketComponent() {
   const [socket, setSocket] = useState(null);
-  const [, setMessages] = useState([]);
-  const [input, setInput] = useState("test");
+  const [listOptions, setListOptions] = useState([]);
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080/ws");
@@ -13,7 +12,10 @@ function WebSocketComponent() {
     };
 
     ws.onmessage = (event) => {
-      setMessages((prevMessages) => [...prevMessages, event.data]);
+      const message = JSON.parse(event.data);
+      if (message.messageType == "List Options") {
+        setListOptions(message.options);
+      }
     };
 
     ws.onclose = () => {
@@ -29,14 +31,24 @@ function WebSocketComponent() {
     return () => ws.close();
   }, []);
 
-  const sendMessage = () => {
-    if (socket && input.trim()) {
-      socket.send(input);
-      setInput("");
+  const sendChoice = (choice) => {
+    if (socket) {
+      let message = JSON.stringify({ messageType: "Choice", data: choice });
+      socket.send(message);
     }
   };
+  const premadeOptions = listOptions.map((item, index) => (
+    <button onClick={() => sendChoice(item)} key={index}>
+      {item}
+    </button>
+  ));
 
-  return <button onClick={sendMessage}>Click</button>;
+  return (
+    <div>
+      <h1>Choose a template list</h1>
+      <ul>{premadeOptions}</ul>
+    </div>
+  );
 }
 
 export default WebSocketComponent;
