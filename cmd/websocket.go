@@ -22,17 +22,17 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	log.Println("Connected Successfully")
 
 	battle.SendBattleOptions(ws)
-	for {
 
+	for {
 		_, msg, err := ws.ReadMessage()
 		if err != nil {
 			log.Printf("Error reading message %v\n", err)
 		}
 		log.Printf("Received message : %s\n", msg)
 
-		if err = ws.WriteMessage(websocket.TextMessage, msg); err != nil {
-			log.Printf("Error: %v\n", err)
-			break
-		}
+		// if err = ws.WriteMessage(websocket.TextMessage, msg); err != nil {
+		// 	log.Printf("Error: %v\n", err)
+		// 	break
+		// }
 	}
 }
