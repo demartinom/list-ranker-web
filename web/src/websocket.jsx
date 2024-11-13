@@ -31,14 +31,15 @@ function WebSocketComponent() {
     return () => ws.close();
   }, []);
 
-  // const sendMessage = () => {
-  //   if (socket && input.trim()) {
-  //     socket.send(input);
-  //     setInput("");
-  //   }
-  // };
+  const sendChoice = (choice) => {
+    if (socket) {
+      socket.send(choice);
+    }
+  };
   const premadeOptions = listOptions.map((item, index) => (
-    <button key={index}>{item}</button>
+    <button onClick={() => sendChoice(item)} key={index}>
+      {item}
+    </button>
   ));
 
   return (
