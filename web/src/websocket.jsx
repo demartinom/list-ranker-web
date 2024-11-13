@@ -33,7 +33,8 @@ function WebSocketComponent() {
 
   const sendChoice = (choice) => {
     if (socket) {
-      socket.send(choice);
+      let message = JSON.stringify({ messageType: "Choice", data: choice });
+      socket.send(message);
     }
   };
   const premadeOptions = listOptions.map((item, index) => (
