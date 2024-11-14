@@ -16,3 +16,11 @@ type ReceivedMessage struct {
 	MessageType string          `json:"messageType"`
 	Data        json.RawMessage `json:"data"`
 }
+
+type PremadeList struct {
+	List string
+}
+
+type CustomList struct {
+	List []string
+}
