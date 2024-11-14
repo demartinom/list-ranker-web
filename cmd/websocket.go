@@ -38,17 +38,17 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 
 		switch message.MessageType {
 		case "Premade List":
-			var listChoice battle.PremadeList
+			var listChoice string
 			if err := json.Unmarshal(message.Data, &listChoice); err != nil {
 				log.Println("Error unmarshalling:", err)
 			}
-			fmt.Println(listChoice.List)
+			fmt.Println(listChoice)
 		case "Custom List":
-			var customList battle.CustomList
+			var customList []string
 			if err := json.Unmarshal(message.Data, &customList); err != nil {
 				log.Println("Error unmarshalling:", err)
 			}
-			fmt.Println(customList.List)
+			fmt.Println(customList)
 		}
 
 		// if err = ws.WriteMessage(websocket.TextMessage, msg); err != nil {
