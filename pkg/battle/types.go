@@ -7,7 +7,7 @@ type Item struct {
 	Score int
 }
 
-type ListChoices struct {
+type PremadeLists struct {
 	MessageType string   `json:"messageType"`
 	Options     []string `json:"options"`
 }
