@@ -1,11 +1,21 @@
-import CustomList from "./customList";
-import WebSocketComponent from "./websocket";
+import { useEffect, useState } from "react";
+import ListSelection from "./ListSelection";
+import initWebSocket from "./websocket";
 
 function App() {
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    setSocket(initWebSocket());
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
+  }, []);
   return (
     <>
-      <WebSocketComponent />
-      <CustomList />
+      <ListSelection socket={socket} />
     </>
   );
 }
