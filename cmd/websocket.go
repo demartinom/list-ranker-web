@@ -35,9 +35,16 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("Error reading message %v\n", err)
 		}
+
 		switch message.MessageType {
-		case "Choice":
-			fmt.Printf("choice made %s\n", message.Data)
+		case "Premade List":
+			var listChoice battle.PremadeList
+			json.Unmarshal(message.Data, &listChoice)
+			fmt.Println(listChoice.List)
+		case "Custom List":
+			var customList battle.CustomList
+			json.Unmarshal(message.Data, &customList)
+			fmt.Println(customList.List)
 		}
 
 		// if err = ws.WriteMessage(websocket.TextMessage, msg); err != nil {
