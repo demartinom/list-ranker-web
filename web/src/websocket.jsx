@@ -1,54 +1,25 @@
-import { useEffect, useState } from "react";
+let socket;
 
-function WebSocketComponent() {
-  const [socket, setSocket] = useState(null);
-  const [listOptions, setListOptions] = useState([]);
+function initWebSocket() {
+  socket = new WebSocket("ws://localhost:8080/ws");
 
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/ws");
-
-    ws.onopen = () => {
-      console.log("Connected to WebSocket");
-    };
-
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.messageType == "List Options") {
-        setListOptions(message.options);
-      }
-    };
-
-    ws.onclose = () => {
-      console.log("Disconnected from WebSocket");
-    };
-
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-
-    setSocket(ws);
-
-    return () => ws.close();
-  }, []);
-
-  const sendChoice = (choice) => {
-    if (socket) {
-      let message = JSON.stringify({ messageType: "Choice", data: choice });
-      socket.send(message);
-    }
+  socket.onopen = () => {
+    console.log("Connected to WebSocket");
   };
-  const premadeOptions = listOptions.map((item, index) => (
-    <button onClick={() => sendChoice(item)} key={index}>
-      {item}
-    </button>
-  ));
 
-  return (
-    <div>
-      <h1>Choose a template list</h1>
-      <ul>{premadeOptions}</ul>
-    </div>
-  );
+ 
+
+  socket.onclose = () => {
+    console.log("Disconnected from WebSocket");
+  };
+
+  socket.onerror = (error) => {
+    console.error("WebSocket error:", error);
+  };
+
+  // setSocket(socket);
+
+  return socket;
 }
 
-export default WebSocketComponent;
+export default initWebSocket;
