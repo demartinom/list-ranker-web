@@ -39,11 +39,15 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		switch message.MessageType {
 		case "Premade List":
 			var listChoice battle.PremadeList
-			json.Unmarshal(message.Data, &listChoice)
+			if err := json.Unmarshal(message.Data, &listChoice); err != nil {
+				log.Println("Error unmarshalling:", err)
+			}
 			fmt.Println(listChoice.List)
 		case "Custom List":
 			var customList battle.CustomList
-			json.Unmarshal(message.Data, &customList)
+			if err := json.Unmarshal(message.Data, &customList); err != nil {
+				log.Println("Error unmarshalling:", err)
+			}
 			fmt.Println(customList.List)
 		}
 
