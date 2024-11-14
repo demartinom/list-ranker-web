@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 export default function ListSelection({ socket }) {
   const [userInput, setUserInput] = useState("");
-  const [userList, setUserList] = useState([]);
   const [listOptions, setListOptions] = useState([]);
 
   useEffect(() => {
@@ -19,17 +18,17 @@ export default function ListSelection({ socket }) {
 
   const createList = () => {
     const formattedList = userInput.split(", ");
-    setUserList(formattedList);
+    sendChoice("Custom List", formattedList);
   };
 
-  const sendChoice = (choice) => {
+  const sendChoice = (choiceType, choice) => {
     if (socket) {
-      let message = JSON.stringify({ messageType: "Choice", data: choice });
+      let message = JSON.stringify({ messageType: choiceType, data: choice });
       socket.send(message);
     }
   };
   const premadeOptions = listOptions.map((item, index) => (
-    <button onClick={() => sendChoice(item)} key={index}>
+    <button onClick={() => sendChoice("Premade List", item)} key={index}>
       {item}
     </button>
   ));
@@ -44,7 +43,7 @@ export default function ListSelection({ socket }) {
         Create a custom list of items you would like to rank separated by commas
       </p>
       <input onInput={(e) => setUserInput(e.target.value)} type="text" />
-      <button onClick={createList}>Create List</button>
+      <button onClick={()=>createList("Custom List", userInput)}>Create List</button>
     </div>
   );
 }
