@@ -46,7 +46,7 @@ func GetFileNames() []string {
 
 // Readies CSV file to be used in game
 func ReadCSV(fileName string) []Item {
-	filePath := fmt.Sprintf("/%s.csv", fileName)
+	filePath := fmt.Sprintf("game-data/%s.csv", fileName)
 	file, err := os.Open(filePath)
 	if err != nil {
 		log.Fatal(err)
