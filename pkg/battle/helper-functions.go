@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
+	"math/rand"
 	"os"
 	"path/filepath"
 
@@ -80,4 +81,20 @@ func ReadCustom(customList []string) []Item {
 	}
 
 	return itemsList
+}
+
+func chooseBattlers(list []Item) ([]Item, []int) {
+	fighterOneIndex := rand.Intn(len(list))
+	fighterTwoIndex := rand.Intn(len(list))
+
+	for fighterOneIndex == fighterTwoIndex {
+		fighterTwoIndex = rand.Intn(len(list))
+	}
+
+	fighterOne := list[fighterOneIndex]
+	fighterTwo := list[fighterTwoIndex]
+
+	combatants := []Item{fighterOne, fighterTwo}
+	indexes := []int{fighterOneIndex, fighterTwoIndex}
+	return combatants, indexes
 }
