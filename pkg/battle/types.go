@@ -16,3 +16,8 @@ type ReceivedMessage struct {
 	MessageType string          `json:"messageType"`
 	Data        json.RawMessage `json:"data"`
 }
+
+type CombatantsList struct {
+	MessageType string `json:"messageType"`
+	Combatants  []Item `json:"combatants"`
+}
