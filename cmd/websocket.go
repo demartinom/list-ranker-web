@@ -42,7 +42,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error unmarshalling:", err)
 			}
 			battleList := battle.ReadCSV(listChoice)
-			battle.Battle(battleList)
+			battle.Battle(battleList, ws)
 
 		case "Custom List":
 			var customList []string
@@ -50,7 +50,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error unmarshalling:", err)
 			}
 			battleList := battle.ReadCustom(customList)
-			battle.Battle(battleList)
+			battle.Battle(battleList, ws)
 		}
 	}
 }
