@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -42,18 +41,16 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			if err := json.Unmarshal(message.Data, &listChoice); err != nil {
 				log.Println("Error unmarshalling:", err)
 			}
-			fmt.Println(listChoice)
+			battleList := battle.ReadCSV(listChoice)
+			battle.Battle(battleList)
+
 		case "Custom List":
 			var customList []string
 			if err := json.Unmarshal(message.Data, &customList); err != nil {
 				log.Println("Error unmarshalling:", err)
 			}
-			fmt.Println(customList)
+			battleList := battle.ReadCustom(customList)
+			battle.Battle(battleList)
 		}
-
-		// if err = ws.WriteMessage(websocket.TextMessage, msg); err != nil {
-		// 	log.Printf("Error: %v\n", err)
-		// 	break
-		// }
 	}
 }

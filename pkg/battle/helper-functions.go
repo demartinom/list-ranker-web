@@ -1,23 +1,16 @@
 package battle
 
 import (
+	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"io/fs"
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/gorilla/websocket"
 )
-
-func ConvertToSlice(listInput [][]string) []Item {
-	var itemsList []Item
-
-	for _, itemInput := range listInput {
-		itemsList = append(itemsList, Item{Name: itemInput[0], Score: 0})
-	}
-
-	return itemsList
-}
 
 func SendBattleOptions(conn *websocket.Conn) {
 	fileNames := GetFileNames()
@@ -49,4 +42,42 @@ func GetFileNames() []string {
 		log.Fatal(err)
 	}
 	return files
+}
+
+// Readies CSV file to be used in game
+func ReadCSV(fileName string) []Item {
+	filePath := fmt.Sprintf("game-data/%s.csv", fileName)
+	file, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer file.Close()
+	reader := csv.NewReader(file)
+	//Skip over header line
+	reader.Read()
+
+	listItems, err := reader.ReadAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var itemsList []Item
+
+	for _, itemInput := range listItems {
+		itemsList = append(itemsList, Item{Name: itemInput[0], Score: 0})
+	}
+
+	return itemsList
+}
+
+// Readies User lisst to be used in game
+func ReadCustom(customList []string) []Item {
+	var itemsList []Item
+
+	for _, itemInput := range customList {
+		itemsList = append(itemsList, Item{Name: itemInput, Score: 0})
+	}
+
+	return itemsList
 }
