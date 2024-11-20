@@ -10,14 +10,15 @@ export default function ListSelection() {
 
   // Wait for premade list options from backend
   useEffect(() => {
-    if (socket) {
-      socket.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        if (message.messageType == "List Options") {
-          setListOptions(message.options);
-        }
-      };
-    }
+    //Wait for socket
+    if (!socket) return;
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.messageType == "List Options") {
+        setListOptions(message.options);
+      }
+    };
   }, [socket]);
 
   // Create array with items in user created list
