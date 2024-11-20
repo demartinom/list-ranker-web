@@ -1,25 +1,35 @@
-let socket;
+/* eslint-disable react/prop-types */
 
-function initWebSocket() {
-  socket = new WebSocket("ws://localhost:8080/ws");
+import { createContext, useEffect, useState } from "react";
 
-  socket.onopen = () => {
-    console.log("Connected to WebSocket");
-  };
+export const WebSocketContext = createContext(null);
 
- 
+export default function WebSocketProvider({ children }) {
+  const [socket, setSocket] = useState(null);
 
-  socket.onclose = () => {
-    console.log("Disconnected from WebSocket");
-  };
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8080/ws");
+    setSocket(ws);
+    socket.onopen = () => {
+      console.log("Connected to WebSocket");
+    };
 
-  socket.onerror = (error) => {
-    console.error("WebSocket error:", error);
-  };
+    socket.onclose = () => {
+      console.log("Disconnected from WebSocket");
+    };
 
-  // setSocket(socket);
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
 
-  return socket;
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  return (
+    <WebSocketContext.Provider value={socket}>
+      {children}
+    </WebSocketContext.Provider>
+  );
 }
-
-export default initWebSocket;
