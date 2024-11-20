@@ -9,19 +9,21 @@ export default function WebSocketProvider({ children }) {
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080/ws");
-    setSocket(ws);
-    socket.onopen = () => {
+
+    ws.onopen = () => {
       console.log("Connected to WebSocket");
     };
 
-    socket.onclose = () => {
+    ws.onclose = () => {
       console.log("Disconnected from WebSocket");
     };
 
-    socket.onerror = (error) => {
+    ws.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
 
+    setSocket(ws);
+    
     return () => {
       ws.close();
     };
