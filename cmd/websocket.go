@@ -28,6 +28,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		_, msg, err := ws.ReadMessage()
 		if err != nil {
 			log.Printf("Error reading message: %v\n", err)
+			break
 		}
 
 		if len(msg) == 0 {
