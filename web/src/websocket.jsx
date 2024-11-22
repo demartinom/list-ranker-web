@@ -32,7 +32,7 @@ export default function WebSocketProvider({ children }) {
           setListOptions(message.options);
           break;
         case "Combatants":
-          setCombatants(message.options);
+          setCombatants(message.combatants);
           break;
       }
     };
