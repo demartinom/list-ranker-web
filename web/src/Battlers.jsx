@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { WebSocketContext } from "./websocket";
 
 export default function Battlers() {
-  const { combatants } = useContext(WebSocketContext);
+  const { socket, combatants } = useContext(WebSocketContext);
 
   return (
     <div>
@@ -10,7 +10,9 @@ export default function Battlers() {
       {combatants.length > 0 ? (
         <ul>
           {combatants.map((item, index) => (
-            <li key={index}>{item.Name}</li>
+            <button key={index} onClick={()=>sendResult(socket, item)}>
+              {item.Name}
+            </button>
           ))}
         </ul>
       ) : (
@@ -18,4 +20,12 @@ export default function Battlers() {
       )}
     </div>
   );
+}
+
+function sendResult(socket, choice) {
+  if (socket) {
+    let result = JSON.stringify({ messageType: "Result", winner: choice });
+    console.log(result)
+    socket.send(result);
+  }
 }
