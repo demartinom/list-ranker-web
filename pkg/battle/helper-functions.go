@@ -81,3 +81,15 @@ func ReadCustom(customList []string) []Item {
 
 	return itemsList
 }
+
+func sendCombatants(battlers []Item, conn *websocket.Conn) {
+	jsonData, err := json.Marshal(CombatantsList{"Combatants", battlers})
+	if err != nil {
+		log.Println("Error marshalling json:", err)
+		return
+	}
+	err = conn.WriteMessage(websocket.TextMessage, jsonData)
+	if err != nil {
+		log.Println("Error sending message:", err)
+	}
+}

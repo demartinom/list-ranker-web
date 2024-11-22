@@ -1,25 +1,52 @@
-let socket;
+/* eslint-disable react/prop-types */
 
-function initWebSocket() {
-  socket = new WebSocket("ws://localhost:8080/ws");
+import { createContext, useEffect, useState } from "react";
 
-  socket.onopen = () => {
-    console.log("Connected to WebSocket");
-  };
+export const WebSocketContext = createContext(null);
 
- 
+export default function WebSocketProvider({ children }) {
+  const [socket, setSocket] = useState(null);
+  let [combatants, setCombatants] = useState([]);
+  const [listOptions, setListOptions] = useState([]);
 
-  socket.onclose = () => {
-    console.log("Disconnected from WebSocket");
-  };
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8080/ws");
 
-  socket.onerror = (error) => {
-    console.error("WebSocket error:", error);
-  };
+    ws.onopen = () => {
+      console.log("Connected to WebSocket");
+    };
 
-  // setSocket(socket);
+    ws.onclose = () => {
+      console.log("Disconnected from WebSocket");
+    };
 
-  return socket;
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+
+      switch (message.messageType) {
+        case "List Options":
+          setListOptions(message.options);
+          break;
+        case "Combatants":
+          setCombatants(message.combatants);
+          break;
+      }
+    };
+
+    setSocket(ws);
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  return (
+    <WebSocketContext.Provider value={{ socket, listOptions, combatants }}>
+      {children}
+    </WebSocketContext.Provider>
+  );
 }
-
-export default initWebSocket;

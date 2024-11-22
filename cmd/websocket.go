@@ -25,14 +25,20 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	battle.SendBattleOptions(ws)
 
 	for {
-		var message battle.ReceivedMessage
-
 		_, msg, err := ws.ReadMessage()
-		if err := json.Unmarshal(msg, &message); err != nil {
-			log.Println("Error unmarshalling:", err)
-		}
 		if err != nil {
-			log.Printf("Error reading message %v\n", err)
+			log.Printf("Error reading message: %v\n", err)
+			break
+		}
+
+		if len(msg) == 0 {
+			log.Println("Received empty message, skipping...")
+		}
+
+		var message battle.ReceivedMessage
+		if err := json.Unmarshal(msg, &message); err != nil {
+			log.Printf("Error unmarshalling message: %v\n", err)
+			continue
 		}
 
 		switch message.MessageType {
@@ -42,7 +48,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error unmarshalling:", err)
 			}
 			battleList := battle.ReadCSV(listChoice)
-			battle.Battle(battleList)
+			battle.Battle(battleList, ws)
 
 		case "Custom List":
 			var customList []string
@@ -50,7 +56,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error unmarshalling:", err)
 			}
 			battleList := battle.ReadCustom(customList)
-			battle.Battle(battleList)
+			battle.Battle(battleList, ws)
 		}
 	}
 }
