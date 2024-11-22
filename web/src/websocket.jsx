@@ -6,6 +6,8 @@ export const WebSocketContext = createContext(null);
 
 export default function WebSocketProvider({ children }) {
   const [socket, setSocket] = useState(null);
+  let [combatants, setCombatants] = useState([]);
+  const [listOptions, setListOptions] = useState([]);
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080/ws");
@@ -22,15 +24,28 @@ export default function WebSocketProvider({ children }) {
       console.error("WebSocket error:", error);
     };
 
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+
+      switch (message.messageType) {
+        case "List Options":
+          setListOptions(message.options);
+          break;
+        case "Combatants":
+          setCombatants(message.options);
+          break;
+      }
+    };
+
     setSocket(ws);
-    
+
     return () => {
       ws.close();
     };
   }, []);
 
   return (
-    <WebSocketContext.Provider value={socket}>
+    <WebSocketContext.Provider value={{ socket, listOptions, combatants }}>
       {children}
     </WebSocketContext.Provider>
   );

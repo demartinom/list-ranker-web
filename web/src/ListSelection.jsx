@@ -1,25 +1,10 @@
-/* eslint-disable react/prop-types */
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { WebSocketContext } from "./websocket";
 
 export default function ListSelection() {
-  const socket = useContext(WebSocketContext);
+  const { socket, listOptions } = useContext(WebSocketContext);
 
   const [userInput, setUserInput] = useState("");
-  const [listOptions, setListOptions] = useState([]);
-
-  // Wait for premade list options from backend
-  useEffect(() => {
-    //Wait for socket
-    if (!socket) return;
-
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.messageType == "List Options") {
-        setListOptions(message.options);
-      }
-    };
-  }, [socket]);
 
   // Create array with items in user created list
   const createList = () => {
