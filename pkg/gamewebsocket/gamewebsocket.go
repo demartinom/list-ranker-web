@@ -1,4 +1,4 @@
-package main
+package gamewebsocket
 
 import (
 	"encoding/json"
@@ -12,7 +12,7 @@ import (
 // Create instance of Upgrader struct to upgrade http connection to websocket
 var upgrader = websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024, CheckOrigin: func(r *http.Request) bool { return true }}
 
-func handleConnections(w http.ResponseWriter, r *http.Request) {
+func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -57,6 +57,11 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 			battleList := battle.ReadCustom(customList)
 			battle.Battle(battleList, ws)
+		case "Result":
+			var winner battle.Item
+			if err := json.Unmarshal(message.Data, &winner); err != nil {
+				log.Println("Error unmarshalling:", err)
+			}
 		}
 	}
 }
