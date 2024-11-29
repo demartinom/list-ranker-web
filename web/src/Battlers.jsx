@@ -24,8 +24,7 @@ export default function Battlers() {
 
 function sendResult(socket, choice) {
   if (socket) {
-    let result = JSON.stringify({ messageType: "Result", winner: choice });
-    console.log(result)
+    let result = JSON.stringify({ messageType: "Result", data: choice });
     socket.send(result);
   }
 }
