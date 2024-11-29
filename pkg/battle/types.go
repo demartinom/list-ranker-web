@@ -21,8 +21,3 @@ type CombatantsList struct {
 	MessageType string `json:"messageType"`
 	Combatants  []Item `json:"combatants"`
 }
-
-type BattleResult struct {
-	MessageType string `json:"messageType"`
-	Winner      Item   `json:"winner"`
-}
