@@ -57,6 +57,11 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 			battleList := battle.ReadCustom(customList)
 			battle.Battle(battleList, ws)
+		case "Result":
+			var winner battle.Item
+			if err := json.Unmarshal(message.Data, &winner); err != nil {
+				log.Println("Error unmarshalling:", err)
+			}
 		}
 	}
 }
