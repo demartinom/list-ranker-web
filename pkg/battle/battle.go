@@ -11,9 +11,8 @@ import (
 func Battle(list []global.Item, ws *websocket.Conn) {
 	battlers, _ := chooseBattlers(list)
 	sendCombatants(battlers, ws)
-	for _, v := range battlers {
-		fmt.Println(v)
-	}
+	<-global.WinnerPicked
+	fmt.Println(global.Winner)
 }
 
 func chooseBattlers(list []global.Item) ([]global.Item, []int) {
