@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/demartinom/list-ranker-web/pkg/battle"
+	"github.com/demartinom/list-ranker-web/pkg/global"
 	"github.com/gorilla/websocket"
 )
 
@@ -58,8 +59,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			battleList := battle.ReadCustom(customList)
 			battle.Battle(battleList, ws)
 		case "Result":
-			var winner battle.Item
-			if err := json.Unmarshal(message.Data, &winner); err != nil {
+			if err := json.Unmarshal(message.Data, &global.Winner); err != nil {
 				log.Println("Error unmarshalling:", err)
 			}
 		}
