@@ -1,7 +1,9 @@
 package global
 
-var Winner Item
+import "github.com/demartinom/list-ranker-web/pkg/battle"
+
+var Winner battle.Item
 
 func ClearWinner() {
-	Winner = Item{}
+	Winner = battle.Item{}
 }
