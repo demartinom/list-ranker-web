@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"math/rand"
 
+	"github.com/demartinom/list-ranker-web/pkg/global"
 	"github.com/gorilla/websocket"
 )
 
-func Battle(list []Item, ws *websocket.Conn) {
+func Battle(list []global.Item, ws *websocket.Conn) {
 	battlers, _ := chooseBattlers(list)
 	sendCombatants(battlers, ws)
 	for _, v := range battlers {
@@ -15,7 +16,7 @@ func Battle(list []Item, ws *websocket.Conn) {
 	}
 }
 
-func chooseBattlers(list []Item) ([]Item, []int) {
+func chooseBattlers(list []global.Item) ([]global.Item, []int) {
 	fighterOneIndex := rand.Intn(len(list))
 	fighterTwoIndex := rand.Intn(len(list))
 
@@ -26,7 +27,7 @@ func chooseBattlers(list []Item) ([]Item, []int) {
 	fighterOne := list[fighterOneIndex]
 	fighterTwo := list[fighterTwoIndex]
 
-	combatants := []Item{fighterOne, fighterTwo}
+	combatants := []global.Item{fighterOne, fighterTwo}
 	indexes := []int{fighterOneIndex, fighterTwoIndex}
 	return combatants, indexes
 }

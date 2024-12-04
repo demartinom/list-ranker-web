@@ -1,9 +1,12 @@
 package global
 
-import "github.com/demartinom/list-ranker-web/pkg/battle"
-
-var Winner battle.Item
+var Winner Item
 
 func ClearWinner() {
-	Winner = battle.Item{}
+	Winner = Item{}
+}
+
+type Item struct {
+	Name  string
+	Score int
 }
