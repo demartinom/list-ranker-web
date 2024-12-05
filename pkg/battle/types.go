@@ -1,11 +1,10 @@
 package battle
 
-import "encoding/json"
+import (
+	"encoding/json"
 
-type Item struct {
-	Name  string
-	Score int
-}
+	"github.com/demartinom/list-ranker-web/pkg/global"
+)
 
 type PremadeLists struct {
 	MessageType string   `json:"messageType"`
@@ -18,6 +17,6 @@ type ReceivedMessage struct {
 }
 
 type CombatantsList struct {
-	MessageType string `json:"messageType"`
-	Combatants  []Item `json:"combatants"`
+	MessageType string        `json:"messageType"`
+	Combatants  []global.Item `json:"combatants"`
 }
