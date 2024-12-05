@@ -12,7 +12,7 @@ func Battle(list []global.Item, ws *websocket.Conn) {
 	battlers, _ := chooseBattlers(list)
 	sendCombatants(battlers, ws)
 	<-global.WinnerPicked
-	fmt.Println(global.Winner)
+	battleResult(battlers)
 }
 
 func chooseBattlers(list []global.Item) ([]global.Item, []int) {
@@ -29,4 +29,15 @@ func chooseBattlers(list []global.Item) ([]global.Item, []int) {
 	combatants := []global.Item{fighterOne, fighterTwo}
 	indexes := []int{fighterOneIndex, fighterTwoIndex}
 	return combatants, indexes
+}
+
+func battleResult(battlers []global.Item) {
+	if global.Winner.Name == battlers[0].Name {
+		battlers[0].Win()
+		battlers[1].Lose()
+	} else {
+		battlers[0].Lose()
+		battlers[1].Win()
+	}
+	fmt.Println(battlers)
 }
