@@ -1,7 +1,6 @@
 package battle
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/demartinom/list-ranker-web/pkg/global"
@@ -9,10 +8,12 @@ import (
 )
 
 func Battle(list []global.Item, ws *websocket.Conn) {
-	battlers, _ := chooseBattlers(list)
-	sendCombatants(battlers, ws)
-	<-global.WinnerPicked
-	battleResult(battlers)
+	for len(list) > 1 {
+		battlers, _ := chooseBattlers(list)
+		sendCombatants(battlers, ws)
+		<-global.WinnerPicked
+		battleResult(battlers)
+	}
 }
 
 func chooseBattlers(list []global.Item) ([]global.Item, []int) {
@@ -39,5 +40,5 @@ func battleResult(battlers []global.Item) {
 		battlers[0].Lose()
 		battlers[1].Win()
 	}
-	fmt.Println(battlers)
+	global.Winner = global.Item{}
 }
