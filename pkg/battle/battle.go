@@ -1,6 +1,7 @@
 package battle
 
 import (
+	"fmt"
 	"math/rand"
 
 	"github.com/demartinom/list-ranker-web/pkg/global"
@@ -13,6 +14,10 @@ func Battle(list []*global.Item, ws *websocket.Conn) {
 		sendCombatants(battlers, ws)
 		<-global.WinnerPicked
 		battleResult(battlers)
+		fmt.Println("")
+		for _, item := range list {
+			fmt.Println(item)
+		}
 	}
 }
 
