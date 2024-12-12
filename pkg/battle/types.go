@@ -17,6 +17,6 @@ type ReceivedMessage struct {
 }
 
 type CombatantsList struct {
-	MessageType string        `json:"messageType"`
-	Combatants  []global.Item `json:"combatants"`
+	MessageType string         `json:"messageType"`
+	Combatants  []*global.Item `json:"combatants"`
 }
