@@ -46,7 +46,7 @@ func GetFileNames() []string {
 }
 
 // Readies CSV file to be used in game
-func ReadCSV(fileName string) []global.Item {
+func ReadCSV(fileName string) []*global.Item {
 	filePath := fmt.Sprintf("game-data/%s.csv", fileName)
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -63,27 +63,27 @@ func ReadCSV(fileName string) []global.Item {
 		log.Fatal(err)
 	}
 
-	var itemsList []global.Item
+	var itemsList []*global.Item
 
 	for _, itemInput := range listItems {
-		itemsList = append(itemsList, global.Item{Name: itemInput[0], Score: 0})
+		itemsList = append(itemsList, &global.Item{Name: itemInput[0], Score: 0})
 	}
 
 	return itemsList
 }
 
 // Readies User lisst to be used in game
-func ReadCustom(customList []string) []global.Item {
-	var itemsList []global.Item
+func ReadCustom(customList []string) []*global.Item {
+	var itemsList []*global.Item
 
 	for _, itemInput := range customList {
-		itemsList = append(itemsList, global.Item{Name: itemInput, Score: 0})
+		itemsList = append(itemsList, &global.Item{Name: itemInput, Score: 0})
 	}
 
 	return itemsList
 }
 
-func sendCombatants(battlers []global.Item, conn *websocket.Conn) {
+func sendCombatants(battlers []*global.Item, conn *websocket.Conn) {
 	jsonData, err := json.Marshal(CombatantsList{"Combatants", battlers})
 	if err != nil {
 		log.Println("Error marshalling json:", err)

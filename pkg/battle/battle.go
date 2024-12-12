@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-func Battle(list []global.Item, ws *websocket.Conn) {
+func Battle(list []*global.Item, ws *websocket.Conn) {
 	for len(list) > 1 {
 		battlers, _ := chooseBattlers(list)
 		sendCombatants(battlers, ws)
@@ -16,7 +16,7 @@ func Battle(list []global.Item, ws *websocket.Conn) {
 	}
 }
 
-func chooseBattlers(list []global.Item) ([]global.Item, []int) {
+func chooseBattlers(list []*global.Item) ([]*global.Item, []int) {
 	fighterOneIndex := rand.Intn(len(list))
 	fighterTwoIndex := rand.Intn(len(list))
 
@@ -27,12 +27,12 @@ func chooseBattlers(list []global.Item) ([]global.Item, []int) {
 	fighterOne := list[fighterOneIndex]
 	fighterTwo := list[fighterTwoIndex]
 
-	combatants := []global.Item{fighterOne, fighterTwo}
+	combatants := []*global.Item{fighterOne, fighterTwo}
 	indexes := []int{fighterOneIndex, fighterTwoIndex}
 	return combatants, indexes
 }
 
-func battleResult(battlers []global.Item) {
+func battleResult(battlers []*global.Item) {
 	if global.Winner.Name == battlers[0].Name {
 		battlers[0].Win()
 		battlers[1].Lose()
