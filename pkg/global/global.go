@@ -1,7 +1,10 @@
 package global
 
+import "fmt"
+
 var Winner Item
 var WinnerPicked = make(chan bool, 1)
+var Ranking []string
 
 type Item struct {
 	Name  string
@@ -12,14 +15,18 @@ func (winner *Item) Win() {
 	winner.Score++
 }
 
-func (loser *Item) Lose(list []*Item, index int) []*Item {
+func (loser *Item) Lose(list []*Item, index int, results *[]string) []*Item {
 	loser.Score--
 	if loser.Score <= -2 {
-		list = removeLoser(list, index)
+		list = removeLoser(list, index, results)
 	}
 	return list
 }
 
-func removeLoser(list []*Item, index int) []*Item {
+func removeLoser(list []*Item, index int, results *[]string) []*Item {
+	placement := fmt.Sprintf("%d: %s", len(list), (list)[index].Name)
+	*results = append(*results, placement)
+	fmt.Println("")
+	fmt.Println(results)
 	return append(list[:index], list[index+1:]...)
 }
