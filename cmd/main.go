@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/demartinom/list-ranker-web/pkg/gamewebsocket"
 )
 
 // // Set headers for all handleFuncs to enable CORS
@@ -24,7 +26,7 @@ import (
 // }
 
 func main() {
-	http.HandleFunc("/ws", handleConnections)
+	http.HandleFunc("/ws", gamewebsocket.HandleConnections)
 
 	fmt.Printf("Starting server on port 8080")
 	err := http.ListenAndServe(":8080", nil)

@@ -1,4 +1,4 @@
-package main
+package gamewebsocket
 
 import (
 	"encoding/json"
@@ -6,13 +6,14 @@ import (
 	"net/http"
 
 	"github.com/demartinom/list-ranker-web/pkg/battle"
+	"github.com/demartinom/list-ranker-web/pkg/global"
 	"github.com/gorilla/websocket"
 )
 
 // Create instance of Upgrader struct to upgrade http connection to websocket
 var upgrader = websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024, CheckOrigin: func(r *http.Request) bool { return true }}
 
-func handleConnections(w http.ResponseWriter, r *http.Request) {
+func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -23,16 +24,21 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	log.Println("Connected Successfully")
 
 	battle.SendBattleOptions(ws)
-
 	for {
-		var message battle.ReceivedMessage
-
 		_, msg, err := ws.ReadMessage()
-		if err := json.Unmarshal(msg, &message); err != nil {
-			log.Println("Error unmarshalling:", err)
-		}
 		if err != nil {
-			log.Printf("Error reading message %v\n", err)
+			log.Printf("Error reading message: %v\n", err)
+			break
+		}
+
+		if len(msg) == 0 {
+			log.Println("Received empty message, skipping...")
+		}
+
+		var message battle.ReceivedMessage
+		if err := json.Unmarshal(msg, &message); err != nil {
+			log.Printf("Error unmarshalling message: %v\n", err)
+			continue
 		}
 
 		switch message.MessageType {
@@ -42,7 +48,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error unmarshalling:", err)
 			}
 			battleList := battle.ReadCSV(listChoice)
-			battle.Battle(battleList)
+			go battle.Battle(battleList, ws)
 
 		case "Custom List":
 			var customList []string
@@ -50,7 +56,12 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error unmarshalling:", err)
 			}
 			battleList := battle.ReadCustom(customList)
-			battle.Battle(battleList)
+			battle.Battle(battleList, ws)
+		case "Result":
+			if err := json.Unmarshal(message.Data, &global.Winner); err != nil {
+				log.Println("Error unmarshalling:", err)
+			}
+			global.WinnerPicked <- true
 		}
 	}
 }

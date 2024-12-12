@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/demartinom/list-ranker-web/pkg/global"
 	"github.com/gorilla/websocket"
 )
 
@@ -45,7 +46,7 @@ func GetFileNames() []string {
 }
 
 // Readies CSV file to be used in game
-func ReadCSV(fileName string) []Item {
+func ReadCSV(fileName string) []*global.Item {
 	filePath := fmt.Sprintf("game-data/%s.csv", fileName)
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -62,22 +63,34 @@ func ReadCSV(fileName string) []Item {
 		log.Fatal(err)
 	}
 
-	var itemsList []Item
+	var itemsList []*global.Item
 
 	for _, itemInput := range listItems {
-		itemsList = append(itemsList, Item{Name: itemInput[0], Score: 0})
+		itemsList = append(itemsList, &global.Item{Name: itemInput[0], Score: 0})
 	}
 
 	return itemsList
 }
 
 // Readies User lisst to be used in game
-func ReadCustom(customList []string) []Item {
-	var itemsList []Item
+func ReadCustom(customList []string) []*global.Item {
+	var itemsList []*global.Item
 
 	for _, itemInput := range customList {
-		itemsList = append(itemsList, Item{Name: itemInput, Score: 0})
+		itemsList = append(itemsList, &global.Item{Name: itemInput, Score: 0})
 	}
 
 	return itemsList
+}
+
+func sendCombatants(battlers []*global.Item, conn *websocket.Conn) {
+	jsonData, err := json.Marshal(CombatantsList{"Combatants", battlers})
+	if err != nil {
+		log.Println("Error marshalling json:", err)
+		return
+	}
+	err = conn.WriteMessage(websocket.TextMessage, jsonData)
+	if err != nil {
+		log.Println("Error sending message:", err)
+	}
 }
