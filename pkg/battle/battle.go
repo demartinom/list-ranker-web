@@ -17,11 +17,7 @@ func Battle(list []*global.Item, ws *websocket.Conn, results *[]string) {
 		<-global.WinnerPicked
 		list = battleResult(list, battlers, indexes)
 	}
-	*results = append(*results, fmt.Sprintf("1. %s", (list)[0].Name))
-	slices.Reverse(*results)
-	for _, v := range *results {
-		fmt.Println(v)
-	}
+	gameEnding(results, list)
 }
 
 func chooseBattlers(list []*global.Item) ([]*global.Item, []int) {
@@ -51,4 +47,12 @@ func battleResult(list []*global.Item, battlers []*global.Item, indexes []int) [
 
 	global.Winner = global.Item{}
 	return list
+}
+
+func gameEnding(results *[]string, list []*global.Item) {
+	*results = append(*results, fmt.Sprintf("1. %s", (list)[0].Name))
+	slices.Reverse(*results)
+	for _, v := range *results {
+		fmt.Println(v)
+	}
 }
