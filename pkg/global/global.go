@@ -26,7 +26,5 @@ func (loser *Item) Lose(list []*Item, index int, results *[]string) []*Item {
 func removeLoser(list []*Item, index int, results *[]string) []*Item {
 	placement := fmt.Sprintf("%d: %s", len(list), (list)[index].Name)
 	*results = append(*results, placement)
-	fmt.Println("")
-	fmt.Println(results)
 	return append(list[:index], list[index+1:]...)
 }
