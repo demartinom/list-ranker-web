@@ -52,7 +52,7 @@ func battleResult(list []*global.Item, battlers []*global.Item, indexes []int) [
 }
 
 func gameEnding(results *[]string, list []*global.Item, ws *websocket.Conn) {
-	*results = append(*results, fmt.Sprintf("1. %s", (list)[0].Name))
+	*results = append(*results, (list)[0].Name)
 	slices.Reverse(*results)
 
 	jsonData, err := json.Marshal(ResultsList{"Results", *results})

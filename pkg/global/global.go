@@ -1,7 +1,5 @@
 package global
 
-import "fmt"
-
 var Winner Item
 var WinnerPicked = make(chan bool, 1)
 var Ranking []string
@@ -27,7 +25,7 @@ func (loser *Item) Lose(list []*Item, index int, results *[]string) []*Item {
 }
 
 func removeLoser(list []*Item, index int, results *[]string) []*Item {
-	placement := fmt.Sprintf("%d: %s", len(list), (list)[index].Name)
+	placement := (list)[index].Name
 	*results = append(*results, placement)
 	return append(list[:index], list[index+1:]...)
 }
