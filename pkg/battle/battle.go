@@ -1,7 +1,9 @@
 package battle
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"slices"
 
@@ -17,7 +19,7 @@ func Battle(list []*global.Item, ws *websocket.Conn, results *[]string) {
 		<-global.WinnerPicked
 		list = battleResult(list, battlers, indexes)
 	}
-	gameEnding(results, list)
+	gameEnding(results, list, ws)
 }
 
 func chooseBattlers(list []*global.Item) ([]*global.Item, []int) {
@@ -49,10 +51,18 @@ func battleResult(list []*global.Item, battlers []*global.Item, indexes []int) [
 	return list
 }
 
-func gameEnding(results *[]string, list []*global.Item) {
+func gameEnding(results *[]string, list []*global.Item, ws *websocket.Conn) {
 	*results = append(*results, fmt.Sprintf("1. %s", (list)[0].Name))
 	slices.Reverse(*results)
-	for _, v := range *results {
-		fmt.Println(v)
+
+	jsonData, err := json.Marshal(ResultsList{"Results", *results})
+	if err != nil {
+		log.Println("Error marshalling json:", err)
+		return
+	}
+
+	err = ws.WriteMessage(websocket.TextMessage, jsonData)
+	if err != nil {
+		log.Println("Error sending message:", err)
 	}
 }
