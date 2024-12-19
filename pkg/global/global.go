@@ -17,6 +17,9 @@ func (winner *Item) Win() {
 
 func (loser *Item) Lose(list []*Item, index int, results *[]string) []*Item {
 	loser.Score--
+	if len(list) == 2 {
+		list = removeLoser(list, index, results)
+	}
 	if loser.Score <= -2 {
 		list = removeLoser(list, index, results)
 	}
