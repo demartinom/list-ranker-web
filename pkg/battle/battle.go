@@ -3,23 +3,24 @@ package battle
 import (
 	"fmt"
 	"math/rand"
+	"slices"
 
 	"github.com/demartinom/list-ranker-web/pkg/global"
 	"github.com/gorilla/websocket"
 )
 
-func Battle(list []*global.Item, ws *websocket.Conn) {
+func Battle(list []*global.Item, ws *websocket.Conn, results *[]string) {
 	for len(list) > 1 {
 		battlers, indexes := chooseBattlers(list)
 		sendCombatants(battlers, ws)
 
 		<-global.WinnerPicked
 		list = battleResult(list, battlers, indexes)
-
-		fmt.Println("")
-		for _, item := range list {
-			fmt.Println(item)
-		}
+	}
+	*results = append(*results, fmt.Sprintf("1. %s", (list)[0].Name))
+	slices.Reverse(*results)
+	for _, v := range *results {
+		fmt.Println(v)
 	}
 }
 

@@ -48,7 +48,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error unmarshalling:", err)
 			}
 			battleList := battle.ReadCSV(listChoice)
-			go battle.Battle(battleList, ws)
+			go battle.Battle(battleList, ws, &global.Ranking)
 
 		case "Custom List":
 			var customList []string
@@ -56,7 +56,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error unmarshalling:", err)
 			}
 			battleList := battle.ReadCustom(customList)
-			battle.Battle(battleList, ws)
+			battle.Battle(battleList, ws, &global.Ranking)
 		case "Result":
 			if err := json.Unmarshal(message.Data, &global.Winner); err != nil {
 				log.Println("Error unmarshalling:", err)
