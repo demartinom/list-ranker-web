@@ -8,7 +8,8 @@ export default function WebSocketProvider({ children }) {
   const [socket, setSocket] = useState(null);
   let [combatants, setCombatants] = useState([]);
   const [listOptions, setListOptions] = useState([]);
-
+  const [endResult, setEndResult] = useState([]);
+  
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080/ws");
 
@@ -34,6 +35,9 @@ export default function WebSocketProvider({ children }) {
         case "Combatants":
           setCombatants(message.combatants);
           break;
+        case "ResultsList":
+          setEndResult(message.rankings)
+          break
       }
     };
 
@@ -45,7 +49,7 @@ export default function WebSocketProvider({ children }) {
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{ socket, listOptions, combatants }}>
+    <WebSocketContext.Provider value={{ socket, listOptions, combatants, endResult }}>
       {children}
     </WebSocketContext.Provider>
   );
