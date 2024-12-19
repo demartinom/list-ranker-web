@@ -2,7 +2,6 @@ package battle
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"math/rand"
 	"slices"
@@ -55,7 +54,7 @@ func gameEnding(results *[]string, list []*global.Item, ws *websocket.Conn) {
 	*results = append(*results, (list)[0].Name)
 	slices.Reverse(*results)
 
-	jsonData, err := json.Marshal(ResultsList{"Results", *results})
+	jsonData, err := json.Marshal(ResultsList{"ResultsList", *results})
 	if err != nil {
 		log.Println("Error marshalling json:", err)
 		return
