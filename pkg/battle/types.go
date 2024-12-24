@@ -20,3 +20,8 @@ type CombatantsList struct {
 	MessageType string         `json:"messageType"`
 	Combatants  []*global.Item `json:"combatants"`
 }
+
+type ResultsList struct {
+	MessageType string   `json:"messageType"`
+	Rankings    []string `json:"rankings"`
+}
