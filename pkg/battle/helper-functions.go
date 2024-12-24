@@ -72,14 +72,14 @@ func ReadCSV(fileName string) []*global.Item {
 	return itemsList
 }
 
-// Readies User lisst to be used in game
+// Readies User list to be used in game
 func ReadCustom(customList []string) []*global.Item {
 	var itemsList []*global.Item
 
 	for _, itemInput := range customList {
 		itemsList = append(itemsList, &global.Item{Name: itemInput, Score: 0})
 	}
-
+	fmt.Println("custom")
 	return itemsList
 }
 
